@@ -6,6 +6,10 @@ redis==2.10.6
 
 # Helpers
 python-dotenv==0.8.2
+nltk==3.3
+
+# Beautifiers
+beautifultable==0.5.0
 
 # Debugging aids
 ipdb==0.11
