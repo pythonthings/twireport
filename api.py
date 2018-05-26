@@ -1,7 +1,8 @@
-from twitter import OAuth, TwitterStream
 import os
+from os.path import dirname, join
+
 import dotenv
-from os.path import join, dirname
+from twitter import OAuth, TwitterStream
 
 dotenv_path = join(dirname(__file__), '.env')
 dotenv.load_dotenv(dotenv_path)
