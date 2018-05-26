@@ -1,0 +1,11 @@
+# APIs
+twitter==1.18.0
+
+# Caching
+redis==2.10.6
+
+# Helpers
+python-dotenv==0.8.2
+
+# Debugging aids
+ipdb==0.11
