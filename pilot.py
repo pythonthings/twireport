@@ -53,7 +53,8 @@ def filter_tweets(keyword):
 
 
 if __name__ == '__main__':
-    # Prompt user to enter a keyword on stdin
+    # Flush DB to avoid old entries hindering the output
     conn.flushdb()
+    # Prompt user to enter a keyword on stdin
     keyword = input('Please enter the keyword which you\'d like to track:\n')
     filter_tweets(keyword=keyword)

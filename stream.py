@@ -7,6 +7,7 @@ from services import get_unique_hyperlinks, get_unique_words
 
 conn = redis.StrictRedis('localhost')
 FIVE_MINUTES = 5 * 60 * 1000
+ONE_MINUTE = 60 * 1000
 
 
 def pretty_print_title(title, headers):
@@ -24,6 +25,8 @@ def retrieve_user_data(start_time):
         username = key.split(b':')[-1].decode('utf-8')
         tweet_count = conn.zcount(key, start_time - FIVE_MINUTES, start_time)
         table.append_row([username, tweet_count])
+        # Remove tweet IDs which won't be needed in next iteration
+        conn.zremrangebyscore(key, start_time - ONE_MINUTE, start_time)
     print(table)
 
 
@@ -56,7 +59,7 @@ def retrieve_word_data():
 
     unique_words = get_unique_words(words)
     unique_word_count = len(unique_words)
-    for word in unique_words:
+    for word in unique_words[:10]:
         table.append_row([word[0]])
     print('\n Unique word count: {}'.format(unique_word_count))
     print(table)

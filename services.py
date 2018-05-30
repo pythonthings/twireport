@@ -59,7 +59,8 @@ def get_sanitized_tweet_words(text):
         :return: list
     '''
     # Exclude the links from text
-    words = re.sub(r'^https?:\/\/.*[\r\n]*', '', text)
+    words = re.sub(r'http\S+', '', text)
+    words = re.sub('[^A-Za-z0-9]+', ' ', words)
     tokenized = sent_tokenize(words)
     word_list = []
     for i in tokenized:
@@ -95,4 +96,4 @@ def get_unique_words(words):
         :return: list
     '''
     words_and_count = Counter(words)
-    return sorted(words_and_count.items(), key=operator.itemgetter(1), reverse=True)[:10]
+    return sorted(words_and_count.items(), key=operator.itemgetter(1), reverse=True)
