@@ -9,7 +9,10 @@ from nltk.tokenize import sent_tokenize
 
 stop_words = set(stopwords.words('english'))
 punctuation = set([',', '\'', ':', '@', '#', 'https', 'http'])
-blacklist = set.union(stop_words, punctuation)
+conjunction = set(['and'])
+articles = set(['a', 'an', 'the', 'The'])
+prepositions = set(['of', 'for', 'to', 'on', 'in'])
+blacklist = set.union(stop_words, punctuation, conjunction, articles, prepositions)
 
 
 def set_expiration(conn, args, exp_time=5 * 60 + 5):
@@ -65,7 +68,7 @@ def get_sanitized_tweet_words(text):
     word_list = []
     for i in tokenized:
         word_list = nltk.word_tokenize(i)
-        word_list = [str(word) for word in word_list if word not in blacklist or not word.startswith('//t.co')]
+        word_list = [str(word) for word in word_list if word not in blacklist]
     return word_list
 
 

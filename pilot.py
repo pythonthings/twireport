@@ -44,7 +44,7 @@ def filter_tweets(keyword):
         cur_time = time.time()
         link_key = 'link_{}'.format(tweet_id)
         word_key = 'word_{}'.format(tweet_id)
-        conn.zadd('user_{}:{}'.format(tweet['user']['id_str'], tweet['user']['name']), **{tweet_id: cur_time})
+        conn.zadd('user_{}:{}'.format(tweet['user']['id_str'], tweet['user']['name']), cur_time, tweet_id)
         if expanded_urls:
             conn.lpush(link_key, *expanded_urls)
         if words:
