@@ -3,16 +3,11 @@ import re
 from collections import Counter
 from urllib.parse import urlparse
 
+# Why am I using it when I have to make sets for everything explicitly???!!!
 import nltk
-from nltk.corpus import stopwords
 from nltk.tokenize import sent_tokenize
 
-stop_words = set(stopwords.words('english'))
-punctuation = set([',', '\'', ':', '@', '#', 'https', 'http'])
-conjunction = set(['and'])
-articles = set(['a', 'an', 'the', 'The'])
-prepositions = set(['of', 'for', 'to', 'on', 'in'])
-blacklist = set.union(stop_words, punctuation, conjunction, articles, prepositions)
+from string_perm import blacklist
 
 
 def set_expiration(conn, args, exp_time=5 * 60 + 5):

@@ -6,8 +6,6 @@ from beautifultable import BeautifulTable
 from services import get_unique_hyperlinks, get_unique_words
 
 conn = redis.StrictRedis('localhost')
-FIVE_MINUTES = 5 * 60 * 1000
-ONE_MINUTE = 60 * 1000
 count = 0
 
 
@@ -23,16 +21,17 @@ def remove_user_data(start_time):
     keys = conn.keys('user_*')
     for key in keys:
         # Remove tweet IDs which won't be needed in next iteration
-        conn.zremrangebyscore(key, start_time, start_time + ONE_MINUTE)
+        conn.zremrangebyscore(key, start_time, start_time + 61)
 
 
-def retrieve_user_data(start_time):
-    table = pretty_print_title(title='User Report', headers=['Username', 'Number of tweets'])
+def retrieve_user_data():
+    table = pretty_print_title(title='User Report {}'.format(count), headers=['Username', 'Number of tweets'])
     keys = conn.keys('user_*')
     for key in keys:
         username = key.split(b':')[-1].decode('utf-8')
-        tweet_count = conn.zcount(key, start_time - FIVE_MINUTES, start_time + ONE_MINUTE)
-        table.append_row([username, tweet_count])
+        tweet_count = conn.zcard(key)
+        if tweet_count:
+            table.append_row([username, tweet_count])
     print(table)
 
 
@@ -75,9 +74,9 @@ def retrieve_word_data():
 while True:
     count = count + 1
     start_time = time.time()
-    if not count % 5:
+    if count != 1 and count % 5 == 1:
         remove_user_data(start_time=start_time - 300)
     time.sleep(60.0 - ((time.time() - start_time) % 60.0))
-    retrieve_user_data(start_time=start_time)
+    retrieve_user_data()
     retrieve_link_data()
     retrieve_word_data()
